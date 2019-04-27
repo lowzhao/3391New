@@ -71,10 +71,8 @@ double squaredDistance(Point a, Point b){
 	return (a.x-b.x) *(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
 }
 bool sorter(Path a, Path b){
-	// _(a.p1);
-	// _(a.p2);
-	// _(b.p1);
-	// $(b.p2);
+	_(a.length);
+	$(b.length);
 	return a.length < b.length;
 }
 
@@ -150,8 +148,12 @@ void mainFunction()
 			_(allPaths[i].p2);
 			$(allPaths[i].length);
 		}
+		
+		
 		// _(allPaths.max_size());
 		sort(allPaths.begin(),allPaths.end(),sorter);
+
+
 		// sort(soRandom.begin(),soRandom.end(),sorter);
 		from(i,0,allPaths.size()){
 			Path p = allPaths[i];
