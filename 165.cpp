@@ -71,8 +71,8 @@ double squaredDistance(Point a, Point b){
 	return (a.x-b.x) *(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
 }
 bool sorter(Path a, Path b){
-	_(a.length);
-	$(b.length);
+	// _(a.length);
+	// $(b.length);
 	return a.length < b.length;
 }
 
@@ -80,24 +80,31 @@ int getRoot(int unionSet[],int node){
 	if (unionSet[node] == -1){
 		return node;
 	}else{
-		return getRoot(unionSet,unionSet[node]);
+		return unionSet[node] = getRoot(unionSet,unionSet[node]);
 	}
 }
 
-int findMinDistanceTo(vector<Path> mst[],int start,int end){
+int findMinDistanceTo(Path mst[][199],int mstLen[],bool visited[],int start,int end){
 
-	_(start);
-	_(end);
-	int minL = INF;
-	from(i,0,mst[start].size()){
+	// _(start);
+	// $(end);
+	visited[start] = true;
+
+	int maxL = -1;
+	from(i,0,mstLen[start]){
 		int otherIndex = mst[start][i].p1==start?mst[start][i].p2:mst[start][i].p1;
-		if (otherIndex == end){
-			return mst[start][i].length;
-		}else{
-			minL = min(mst[start][i].length,findMinDistanceTo(mst,otherIndex,end));
+		if (!visited[otherIndex]){
+			if (otherIndex == end){
+				return mst[start][i].length;
+			}else{
+				int distanceToStart =findMinDistanceTo(mst,mstLen,visited,otherIndex,end);
+				if (distanceToStart != -1){
+					maxL = max(mst[start][i].length,distanceToStart);
+				}
+			}
 		}
 	}
-	return minL;
+	return maxL;
 
 }
 
@@ -105,13 +112,14 @@ int findMinDistanceTo(vector<Path> mst[],int start,int end){
 void mainFunction()
 {
 	// int s[200][200];
-	vector<Point > nodes;
-	vector<Path> allPaths;
+	Point nodes[200];
+	Path allPaths[40000];
 	int n;
-	vector<Path> mst[201];
-	vector <int> soRandom ;
-	int unionSet[201];
+	Path mst[200][199];
+	int mstLen[200];
+	int unionSet[200];
 	int x,y;
+	bool visited[200];
 	T =1;
 	while(1){
 		input(n);
@@ -121,8 +129,6 @@ void mainFunction()
 
 		// memset(s,-1,sizeof s);
 
-		nodes.clear();
-		allPaths.clear();
 
 
 		// complex <int > node;
@@ -130,52 +136,69 @@ void mainFunction()
 
 		// memset(mst,complex<int>(-1,0),sizeof mst);
 		memset(unionSet,-1,sizeof unionSet);
+		memset(mstLen, 0 ,sizeof mstLen);
+		int pC = 0;
 		from(i,0,n){
 			
-			input(x);
-			input(y);
-			node.x = x;
-			node.y = y;
-			mst[i].clear();
-			soRandom.push_back(n-i);
-			nodes.push_back(node);
+			input(nodes[i].x);
+			input(nodes[i].y);
+			// node.x = x;
+			// node.y = y;
+			// mst[i].clear();
+			
+			// nodes.push_back(node);
 			from(j,0,i){
-				allPaths.push_back(Path(j,i,squaredDistance(nodes[j],nodes[i])));
+				allPaths[pC++] =Path(j,i,squaredDistance(nodes[j],nodes[i]));
 			}
 		}
-		from(i,0,allPaths.size()){
-			_(allPaths[i].p1);
-			_(allPaths[i].p2);
-			$(allPaths[i].length);
-		}
-		
-		
+		// from(i,0,allPaths.size()){
+		// 	_(allPaths[i].p1);
+		// 	_(allPaths[i].p2);
+		// 	$(allPaths[i].length);
+		// }
 		// _(allPaths.max_size());
-		sort(allPaths.begin(),allPaths.end(),sorter);
-
-
+		sort(allPaths,allPaths+pC,sorter);
+		
 		// sort(soRandom.begin(),soRandom.end(),sorter);
-		from(i,0,allPaths.size()){
+		int connected = 0;
+		from(i,0,pC){
 			Path p = allPaths[i];
-			if (unionSet[p.p2] == -1){
-				unionSet[p.p2] = p.p1;
-				mst[p.p1].push_back(p);
-				mst[p.p2].push_back(p);
-			}else if (unionSet[p.p1] == -1){ // and p2 is not -1
-				unionSet[p.p1] = p.p2;
-				mst[p.p1].push_back(p);
-				mst[p.p2].push_back(p);
-			}else if (getRoot(unionSet,unionSet[p.p1]) != getRoot(unionSet,unionSet[p.p2])) { // both not -1
-				unionSet[p.p2] = p.p1;
-				mst[p.p1].push_back(p);
-				mst[p.p2].push_back(p);
+			// _(p.p1);
+			// _(p.p2);
+			// _(getRoot(unionSet,p.p1));
+			// $(getRoot(unionSet,p.p2));
+
+			int r1 =getRoot(unionSet,p.p1);
+			int r2 =getRoot(unionSet,p.p2);
+			if ( r1 != r2 ) {
+				connected ++;
+				unionSet[r2] = r1;
+				mst[p.p1][mstLen[p.p1]++]=p;
+				mst[p.p2][mstLen[p.p2]++]=p;
+				// 	from(j,0,n){
+				// 	cout << j <<":"<<unionSet[j] << " ";
+				// }
+				// cout << endl;
+
+				if (connected == n-1){
+					break;
+				}
 			}
-		}
+			
+		};
 
-		;
+		// from(i,0,n){
+		// 	$(i);
+		// 	from(j,0,mst[i].size()){
+		// 		_(mst[i][j].p1);
+		// 		_(mst[i][j].p2);
+		// 		$(mst[i][j].length);
+		// 	}
+		// }
 
-
-		printf("Scenario #%d\nFrog Distance = %.3f\n\n",T++,sqrt(findMinDistanceTo(mst,1,0)));
+		memset(visited,false, sizeof visited);
+		
+		printf("Scenario #%d\nFrog Distance = %.3f\n\n",T++,sqrt(findMinDistanceTo(mst,mstLen,visited,1,0)));
 
 
 	}
