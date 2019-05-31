@@ -1,3 +1,4 @@
+
 /*** System Library ***/
 #include <iostream>
 #include <cstdio>
@@ -51,15 +52,76 @@ double cross(double cx, double cy, double x1, double y1,double x2, double y2){
 	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
 }
 
+struct Shape{
+	char sha;
+	double x1;
+	double x2;
+	double x3;
+	double y1;
+	double y2;
+	double y3;
+	double r;
+
+	bool contain(double x, double y){
+		switch(sha){
+			case 'r':
+				return x > x1 && x < x2 && y < y1 && y > y2;
+			case 'c':
+				return (x-x1) * (x-x1) + (y - y1) * (y - y1) < r*r;
+			default: // sha == 't'
+				return cross(x1,y1,x2,y2,x,y)*cross(x1,y1,x3,y3,x,y) < 0 && cross(x2,y2,x1,y1,x,y)*cross(x2,y2,x3,y3,x,y) < 0;
+		}
+	}
+
+} s[20]  ;
+
+
 int T;
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	double x,y;
+	char c;
+	int shapeIndex = 1 ;
+	while (cin >> c && c != '*'){
+		s[shapeIndex].sha = c;
+		switch(c){
+			case 'r':
+				cin >> s[shapeIndex].x1
+					>> s[shapeIndex].y1
+					>> s[shapeIndex].x2
+					>> s[shapeIndex].y2;
+				break;
+			case 'c':
+				cin >> s[shapeIndex].x1
+					>> s[shapeIndex].y1
+					>> s[shapeIndex].r;
+				break;
+			case 't':
+				cin >> s[shapeIndex].x1
+					>> s[shapeIndex].y1
+					>> s[shapeIndex].x2
+					>> s[shapeIndex].y2
+					>> s[shapeIndex].x3
+					>> s[shapeIndex].y3;
+		}
+		shapeIndex ++;
+	}
+	int pointIndex = 1;
+	while (cin >> x && cin >> y && !(x == 9999.9 && y == 9999.9)){
+		bool containedInAny = false;
+		from(i,1,shapeIndex){
+			if (s[i].contain(x,y)){
+				containedInAny = true;
+				cout << "Point "<<pointIndex<<" is contained in figure "<< i << endl;
+			}
+		}
+		if (!containedInAny){
+			cout << "Point "<< pointIndex <<" is not contained in any figure\n"; 
+		}
+		pointIndex++;
+	}
+
 }
 
 int main()

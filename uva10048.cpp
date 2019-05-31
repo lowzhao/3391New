@@ -47,19 +47,23 @@
 
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
-}
 
 int T;
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	int c,s,q;
+	while (
+		scanf("%d%d%d",&c,&s,&q) && 
+		!(c== 0&&s==0 && q ==0 )
+	){
+
+		
+
+
+	}
+
+
 }
 
 int main()
@@ -70,8 +74,8 @@ int main()
 		freopen("in.txt", "r", stdin);
 		freopen("out.txt","w",stdout);
 	}
-	// std::ios_base::sync_with_stdio(false);
-	// std::cin.tie(NULL);
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
 	// testCaseGenerator();
 	mainFunction();
 	return 0;

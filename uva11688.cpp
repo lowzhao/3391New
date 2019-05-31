@@ -51,15 +51,36 @@ double cross(double cx, double cy, double x1, double y1,double x2, double y2){
 	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
 }
 
+struct Node{
+	Node* l = nullptr;
+	Node* r = nullptr;
+	int ind;
+	void rotateToRoot(int v){
+		if (v == ind){
+			return;
+		}
+		if (l!= nullptr && l->ind == v){
+			rotateRight();
+			return;
+		}
+		if (r != nullptr && r->ind == v){
+			rotateLeft();
+			return;
+		}
+		l->rotateToRoot(v);
+		l->rotateToRoot(v);
+	}
+};
+
 int T;
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	while(input(T) && T != 0){
+		from(i,0,T){
+
+		}
+	}
 }
 
 int main()

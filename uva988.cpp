@@ -47,19 +47,62 @@
 
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
-}
+struct Node{
+	vector<int >childs;
+	int numberOfWays;
+}nodes [100000];
 
 int T;
 
+int dfs(Node& n){
+	if (n.numberOfWays != -1){
+		return n.numberOfWays;
+	}else{
+		if (n.childs.empty()){
+			n.numberOfWays = 1;
+			return 1;
+		}else{
+			int aggregate = 0;
+			for(auto v : n.childs){
+				aggregate += dfs(nodes[v]);
+			}
+			n.numberOfWays = aggregate;
+			return n.numberOfWays;
+		}
+	}
+}
+
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	int n,c;
+	bool first = true;
+	while (
+		~input (T)
+	){
+		assert(T < 100000);
+		for(int i = 0 ;i  <T ; i++){
+			nodes[i].childs.clear();
+			nodes[i].numberOfWays = -1;
+
+			input(n);
+
+			from(j,0,n){
+				input(c);
+				nodes[i].childs.push_back(c);
+			}
+		}
+
+		if (!first){
+			lnBrk();	
+		}else{
+			first = false;
+		}
+
+		output(dfs(nodes[0]));
+		lnBrk();
+	}
+
+
 }
 
 int main()
@@ -70,8 +113,8 @@ int main()
 		freopen("in.txt", "r", stdin);
 		freopen("out.txt","w",stdout);
 	}
-	// std::ios_base::sync_with_stdio(false);
-	// std::cin.tie(NULL);
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
 	// testCaseGenerator();
 	mainFunction();
 	return 0;

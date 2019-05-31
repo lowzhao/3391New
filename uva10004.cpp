@@ -42,23 +42,86 @@
 #define from(i, x, y) for (int i = x; i < y; ++i)
 #define fromNeg(i, x, y) for (int i = x; i >= y; --i)
 #define foreach(i,n) for (int i = 0 ;  i< n ; ++i)
-
 #define eps 1e-6
 
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
-}
-
+struct Node{
+	int index;
+	vector<int> friends;
+};
 int T;
+
+int checker[201]; // -1 means not seen, 1 means seen assigned to A, 0 means seen assigned to B
+Node nodes[200];
+bool bico = true;
+queue<int> q;
+
+bool dfs(int next,bool requiredColour){
+	bool opposite = !requiredColour;
+	if (checker[next] == -1){
+		checker[next] = requiredColour;// set to A
+		for (auto d: nodes[next].friends){
+			if  (!dfs(d,opposite )){
+				return false;
+			}
+		}
+		return true;
+	}else if(
+		(checker[next]== 1 && requiredColour == false) || 
+		(checker[next] == 0 && requiredColour == true)
+	) {
+		return false;
+	}else{
+		return true;
+	}
+}
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
+	int n,l;
+
+	foreach(i,200){
+		nodes[i].index = i;
+	}
+	while(input(n) && n != 0){
+		bico = true;
+		memset(checker,-1,sizeof checker);
+		input(l);
+		foreach(i,n){
+			nodes[i].friends.clear();
+		}
+		
+		int node1, node2;
+		foreach(i,l){
+			input(node1);
+			input(node2);
+			nodes[node1] .friends .push_back(node2);
+			nodes[node2] .friends .push_back(node1);
+		}
+
+		foreach (i,n)
+		{
+			if(checker[i] == -1){
+				if (!dfs(i,0)){
+					bico = false;
+					break;
+				}
+			}
+		}
+
+		// if A is true
+		// 		then set its neigbour to false
+		// 		if neighbour is setted 
+		// 			bico = false; and exit;
+
+		if (bico){
+			outputs("BICOLORABLE.\n");
+		}else{
+			outputs("NOT BICOLORABLE.\n");
+		}
+	}
+
 	
 }
 
@@ -68,10 +131,8 @@ int main()
 	if (getenv("vscode") != NULL)
 	{
 		freopen("in.txt", "r", stdin);
-		freopen("out.txt","w",stdout);
+		freopen ("out.txt","w",stdout);
 	}
-	// std::ios_base::sync_with_stdio(false);
-	// std::cin.tie(NULL);
 	// testCaseGenerator();
 	mainFunction();
 	return 0;
