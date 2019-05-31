@@ -51,44 +51,55 @@ double cross(double cx, double cy, double x1, double y1,double x2, double y2){
 	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
 }
 
-struct Node{
-	Node* l = NULL;
-	Node* r = NULL;
-	Node* p = NULL;
-	int ind;
-	void rotateToRoot(int v){
-		if (v == ind){
-			return;
-		}
-		if (l!= NULL && l->ind == v){
-			p->rotateRight();
-			return;
-		}
-		if (r != NULL && r->ind == v){
-			p->rotateLeft();
-			return;
-		}
-		l->rotateToRoot(v);
-		l->rotateToRoot(v);
-	}
-	void rotateRight(){
-		// 
-		
-	}
-	void rotateLeft(){
-		
-	}
-};
+int gcd(int a,int b){
+    if (a % b == 0){
+        return b;
+    }
+    if (a > b){
+        return gcd(b,a%b);
+    }else{
+        return gcd(a,b%a);
+    }
+}
 
 int T;
 
 void mainFunction()
 {
-	while(input(T) && T != 0){
-		from(i,0,T){
+    input(T);
+    T++;
 
-		}
-	}
+    char s1[33];
+    char s2[33];
+    int i1,i2;
+    from(t,1,T){
+        
+        i1=i2=0;
+
+        cin >> s1 >> s2;
+
+        from(i,0,strlen(s1)){
+            i1 <<= 1;
+            if (s1[i] =='1'){
+                i1++;
+            }
+        }
+        from (i,0,strlen(s2)){
+            i2 <<= 1;
+            if (s2[i] == '1'){
+                i2 ++;
+            }
+        }
+
+
+        printf("Pair #%d: ",t);
+        if (gcd(i1,i2) == 1){
+            printf("Love is not all you need!\n");
+        }else{
+            printf("All you need is love!\n");
+        }
+    }
+
 }
 
 int main()

@@ -26,6 +26,7 @@
 #include <set>
 // using namespace std;
 #define ull unsigned long long
+#define ll unsigned long long
 #define DUBUG true
 #define $(x) {if (DUBUG) std::cout << #x << " = " << x << " " << "\n";}
 #define _(x) {if (DUBUG) std::cout << #x << " = " << x << " ";}
@@ -51,44 +52,21 @@ double cross(double cx, double cy, double x1, double y1,double x2, double y2){
 	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
 }
 
-struct Node{
-	Node* l = NULL;
-	Node* r = NULL;
-	Node* p = NULL;
-	int ind;
-	void rotateToRoot(int v){
-		if (v == ind){
-			return;
-		}
-		if (l!= NULL && l->ind == v){
-			p->rotateRight();
-			return;
-		}
-		if (r != NULL && r->ind == v){
-			p->rotateLeft();
-			return;
-		}
-		l->rotateToRoot(v);
-		l->rotateToRoot(v);
-	}
-	void rotateRight(){
-		// 
-		
-	}
-	void rotateLeft(){
-		
-	}
-};
-
 int T;
 
 void mainFunction()
 {
-	while(input(T) && T != 0){
-		from(i,0,T){
-
-		}
-	}
+	int n;
+    input(T);
+	double r, m1,n1,m2,n2,m3,n3;
+	double A,p1,p2;
+    while(T--){
+		cin >> r >> m1 >> n1 >> m2 >> n2 >> m3 >> n3 ;
+		p1 = n1*(m2+n2)  /  (n1+m1) / m2;
+		p2 = m1*(m3+n3)  /  (n1+m1) / n3;
+		printf("%.4lf\n",(1+p1+p2) * r * r * ( sqrt ( (1+p1+p2)/(1+p1-p2) / (1+p2-p1)/(p1+p2-1)  ) ));
+    }
+	
 }
 
 int main()
