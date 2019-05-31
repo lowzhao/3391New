@@ -26,6 +26,7 @@
 #include <set>
 // using namespace std;
 #define ull unsigned long long
+#define ll long long
 #define DUBUG true
 #define $(x) {if (DUBUG) std::cout << #x << " = " << x << " " << "\n";}
 #define _(x) {if (DUBUG) std::cout << #x << " = " << x << " ";}
@@ -47,48 +48,69 @@
 
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
+struct P{
+    ll x,y;
+};
+
+ll cross(P c, P p1,P p2){
+	return (p1.x-c.x)*(p2.y-c.y) - (p1.y-c.y)*(p2.x-c.x);
 }
 
-struct Node{
-	Node* l = NULL;
-	Node* r = NULL;
-	Node* p = NULL;
-	int ind;
-	void rotateToRoot(int v){
-		if (v == ind){
-			return;
-		}
-		if (l!= NULL && l->ind == v){
-			p->rotateRight();
-			return;
-		}
-		if (r != NULL && r->ind == v){
-			p->rotateLeft();
-			return;
-		}
-		l->rotateToRoot(v);
-		l->rotateToRoot(v);
-	}
-	void rotateRight(){
-		// 
-		
-	}
-	void rotateLeft(){
-		
-	}
-};
+bool iIsLargerThanj(P p1, P p2){
+    if (p1.x == p2.x){
+        return p1.y < p2.y;
+    }else{
+        return p1.x < p2.x;
+    }
+}
 
 int T;
 
 void mainFunction()
 {
-	while(input(T) && T != 0){
-		from(i,0,T){
+    cin >> T;
+    int n;
+    P hull[100005];
+    P result[200005];
+    while (T--){
+        cin >> n;
+        
+        int x,y;
+        char c;
+        int hullCount = 0;
+        from (i,0,n){
+            cin >> x >> y >> c;
+            if (c == 'Y'){
+                hull[hullCount].x = x;
+                hull[hullCount].y = y;
+                hullCount ++;
+            }
+        }
 
-		}
-	}
+        
+        sort(hull,hull+hullCount, iIsLargerThanj);
+        int m = 0;
+        from(i,0,hullCount){
+            while (m >= 2 && cross(result[m-2],result[m-1],hull[i]) < 0){
+                m --;
+            }
+            result[m++] = hull[i];
+        }
+        int t = m +1;
+        fromNeg(i,hullCount-2, 0 ){
+            while(m >= t && cross(result[m-2],result[m-1],hull[i]) < 0){
+                m--;
+            }
+            result[m++] = hull[i];
+        }
+        m --;
+        printf("%d\n",m);
+        from(i,0,m){
+            printf("%lld %lld\n",result[i].x,result[i].y);
+        }
+    }
+
+	
 }
 
 int main()
