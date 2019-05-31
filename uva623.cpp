@@ -47,19 +47,98 @@
 
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
-}
+class BigNo{
+	public:
+		int digits[2570];
+
+		BigNo operator+(BigNo n){
+			BigNo res;
+			res.reset();
+			from(i,0,2570){
+				res.digits[i] += n.digits[i] + this->digits[i];
+				if (res.digits[i] >= 10){
+					res.digits[i] %= 10;
+					res.digits[i+1]++; 
+				}
+			}
+			return res;
+		}
+
+		BigNo operator*(int n){
+			vector<int> breakDown;
+			while(n > 0){
+				breakDown.push_back(n%10);
+				n/=10;
+			}
+			BigNo res;
+			res.reset();
+			BigNo temp;
+			int digitNow = 0;
+			for (auto i : breakDown){
+				temp.reset();
+				// sum by i times;
+				from (j,0,i){
+					temp = temp + *this;
+				}
+				// then shift by digitNow;
+				temp.shiftChar(digitNow);
+				res = res + temp;
+				digitNow++;
+			}
+			// BigNo res;
+			// res.reset();
+			// from(i,0,n){
+			// 	res = res + *this;
+			// }
+			return res;
+		}
+
+		void reset(){
+			memset(digits,0,sizeof digits);
+		}
+
+		void shiftChar(int shiftBy){
+			fromNeg(i,2569,shiftBy){
+				digits[i] = digits[i-shiftBy];
+			}
+			from(i,0,shiftBy){
+				digits[i] = 0;
+			}
+		}
+
+		void print(){
+			bool startPrinting = false;
+			fromNeg(i,2569,0){
+				if (digits[i] != 0){
+					startPrinting = true;
+				}
+				if (startPrinting){
+					cout << digits[i] ;
+				}
+			}
+			if (!startPrinting){
+				cout << 0;
+			}
+		}
+}dp[1001];
+
 
 int T;
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	dp[0].reset();
+	dp[0].digits[0] = 1;
+	from(i,1,1001){
+		dp[i].reset();
+		dp[i] = dp[i-1] * i;
+	}
+		
+	while(cin >> T){
+		cout << T << "!" << endl;
+		dp[T].print();
+		lnBrk();
+	}
 }
 
 int main()

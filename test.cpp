@@ -41,24 +41,35 @@
 
 #define from(i, x, y) for (int i = x; i < y; ++i)
 #define fromNeg(i, x, y) for (int i = x; i >= y; --i)
-#define foreach(i,n) for (int i = 0 ;  i< n ; ++i)
 
 #define eps 1e-6
 
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
-}
 
 int T;
+struct A{
+	int b;
+	int c;
+	bool operator < (const A &anotherA)const{
+		return c < anotherA.c;
+	}
+};
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
+	set<A> q;
+	// A a = {3,2};
+	q.insert((A) {3,2});
+	A b = {4,5};
+	q.insert(b);
+	// q.insert(1);
+	// q.insert(5);
+	for (set<A>::iterator it = q.begin() ; it != q.end() ; it++){
+		cout << (*it).b << endl;
+		cout << (*it).c << endl;
+	}
+	cout << endl;
 	
 }
 
@@ -68,10 +79,9 @@ int main()
 	if (getenv("vscode") != NULL)
 	{
 		freopen("in.txt", "r", stdin);
-		freopen("out.txt","w",stdout);
 	}
-	// std::ios_base::sync_with_stdio(false);
-	// std::cin.tie(NULL);
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
 	// testCaseGenerator();
 	mainFunction();
 	return 0;

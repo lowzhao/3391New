@@ -55,11 +55,63 @@ int T;
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	int dp[101][5]	;
+	memset(dp,0,sizeof dp);
+	dp[1][0] = 1;
+	from(i,2,101){
+		from(j,0,5){
+			dp[i][j] = dp[i-1][j];
+		}
+
+		int tempi = i;
+
+		if (tempi >= 100){
+			tempi -= 100;
+			dp[i][4] ++; 
+		}
+		if (tempi / 10 == 9){
+			dp[i][4] ++;
+			dp[i][2]++;
+			tempi = tempi % 10;
+		}else if (tempi / 10 == 4){
+			dp[i][3]++;
+			dp[i][2] ++;
+			tempi = tempi % 10;
+		}else if (tempi /10 >= 5){
+			dp[i][3]++;
+			tempi = tempi - 50; 
+		}
+
+		while (tempi >= 10){
+			dp[i][2]++; 
+			tempi -= 10;
+		}
+
+		if (tempi == 9){
+			dp[i][2] ++;
+			dp[i][0] ++;
+			tempi -= 9;
+		}else if (tempi == 4){
+			dp[i][1]++;
+			dp[i][0]++;
+			tempi -= 4;
+		}else if (tempi >= 5){
+			dp[i][1]++;
+			tempi -= 5;
+		}
+
+		while(tempi >= 1){
+			tempi -= 1;
+			dp[i][0] ++;
+		}
+	}
+
+	int n;
+	while(cin >> n && n != 0){
+		printf("%d: %d i, %d v, %d x, %d l, %d c\n",n,dp[n][0],dp[n][1],dp[n][2],dp[n][3],dp[n][4]);
+	}
+
+
 }
 
 int main()

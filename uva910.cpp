@@ -44,22 +44,53 @@
 #define foreach(i,n) for (int i = 0 ;  i< n ; ++i)
 
 #define eps 1e-6
-
+#define mMax 30
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
-}
 
 int T;
+	int graph[26][2]; 
+	int dp [26][30];
+	bool special[26]; 
+
+int count(int steps, int currentPos){
+	if (dp[currentPos][steps] != -1){
+		return dp[currentPos][steps];
+	}else if (steps == 0){
+		return special[currentPos];
+	}else{
+		dp[currentPos][steps] = count (steps-1,graph[currentPos][0]) + count (steps-1,graph[currentPos][1]);
+		return dp[currentPos][steps];
+	}
+}
+
+
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	int n,m;
+	char c, c0 , c1 ;
+	char cx;
+	while (cin >> n){
+		memset(graph, 0 , sizeof graph);
+		memset(special, false, sizeof special);
+		memset(dp, -1, sizeof dp);
+		from (i,0,n){
+			cin >> c >> c0 >> c1;
+			cin >> cx;
+			c = c-'A';
+			c0 = c0 - 'A';
+			c1 = c1 - 'A';
+
+			graph[c][0] = c0;
+			graph[c][1] = c1;
+			if ( cx == 'x'){
+				special [c] = true;
+			}
+		}
+		input(m);
+		cout << count(m,0) << endl;
+	}
 }
 
 int main()

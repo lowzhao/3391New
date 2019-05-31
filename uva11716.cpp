@@ -55,11 +55,33 @@ int T;
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	input(T);
+	string s;
+	char g[100][100];
+	getchar();
+	while(T--){
+		getline(cin,s);
+		int temp = sqrt(s.length());
+		if (temp*temp != s.length()){
+			cout << "INVALID\n";
+			continue;
+		}
+
+		int index = 0;
+		from(i,0,temp){
+			from(j,0,temp){
+				g[i][j] = s[index++];
+			}
+		}
+
+		from(i,0,temp){
+			from(j,0,temp){
+				cout << g[j][i];
+			}
+		}
+		cout << endl;
+		
+	}
 }
 
 int main()

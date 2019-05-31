@@ -51,15 +51,22 @@ double cross(double cx, double cy, double x1, double y1,double x2, double y2){
 	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
 }
 
+struct Node{
+	Node* l;
+	Node* r;
+	int ind;
+	void rotateToRoot(int v){
+		
+	}
+};
+
 int T;
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	while(input(T) && T != 0){
+
+	}
 }
 
 int main()

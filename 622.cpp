@@ -135,43 +135,92 @@ int T;
 void mainFunction()
 {
 	input(T);
-	string s;
 	char s1[1001];
 	char s2[1001];
+	char maxFoundCS[1001];
+	int s[1001][1001];
 	while (T--) {
-		cin >> s1;
+		inputs(s1);
 		maxFound = 0;
 		maxFoundLen = 0;
 		bool foundAnything = false;
-		for (int i = 0; i < strlen(s1) ; i++) {
-			// make s2 copy
-			for (int k = i+1; k < strlen(s1)+1 ;k++) {
-				if (k - i < maxFoundLen){
-					continue;
+		// cout << s1 << endl;
+		int strlens = strlen(s1);
+		from(i,0,strlens){
+			if ( s1[i] == s1[strlens-1] ) {
+				s[i][strlens-1] = 1;
+			}else{
+				s[i][strlens-1] = 0;
+			}
+		}
+
+		fromNeg(i,strlens-2,0){
+			fromNeg(j,strlens-2,i+1){
+				if (s1[i] == s1[j]){
+					s[i][j] = s[i+1][j+1]+1;
+					
+				}else{
+					s[i][j] = 0;
 				}
-				found = 0;
-				int indexF = 0;
-				for (int j = i; j < k; j++) {
-					s2[indexF++] = s1[j];
-				}
-				s2[indexF] = '\0';
-				KMPSearch(s2, s1);
-				if (found > 1 && maxFoundLen < k-i) {
-					foundAnything = true;
-					maxFound = found;
-					maxFoundLen = k - i;
-					maxFoundS = string(s2);
-				}
-				else if (found > 1 && maxFoundLen == k - i) {
-					if (string(s2) < maxFoundS) {
-						maxFoundS = string(s2);
+			}
+		}
+
+		// from(i,0,strlens-1){
+		// 	from(j,0,i+1){
+		// 		cout << "  ";
+		// 	}
+		// 	from(j,i+1,strlens){
+		// 		cout << s[i][j]<<" ";
+		// 	}
+		// 	cout << endl;
+		// }
+
+
+		maxFound = 0;
+		maxFoundLen = 0;
+		maxFoundCS[0] = '\0';
+		bool foundInPast = false;
+		from(i,0,strlens -1){
+			foundInPast = true;
+			from(j,i+1,strlens){
+				if (s[i][j] > maxFoundLen){
+					maxFoundLen = s[i][j];
+					foundInPast = false;
+					maxFound =1;
+					int tempL = 0;
+					from(k,i,maxFoundLen+i){
+						maxFoundCS[tempL++] = s1[k];
+					}
+					maxFoundCS[tempL] = '\0';
+				}else if (maxFoundLen == s[i][j]){
+					// check inner details
+					int tempL = 0;
+						from(k,i,s[i][j]+i){
+							s2[tempL++] = s1[k];
+						}
+					s2[tempL] = '\0';
+					int compareRes = strcmp(s2,maxFoundCS);
+					if (compareRes < 0){
+						maxFoundLen = s[i][j];
+						foundInPast = false;
+						maxFound =1;
+						tempL = 0;
+						from(k,i,maxFoundLen+i){
+							maxFoundCS[tempL++] = s1[k];
+						}
+						maxFoundCS[tempL] = '\0';
+					}else if (compareRes == 0 && !foundInPast){
+						maxFound++;
 					}
 				}
 			}
 		}
-		if (foundAnything) {
 
-			cout << maxFoundS << " " << maxFound << '\n';
+
+
+		if (maxFoundLen > 0) {
+
+			cout << maxFoundCS << " " << maxFound+1 << '\n';
 		}
 		else {
 			cout << "No repetitions found!\n";
@@ -182,10 +231,10 @@ void mainFunction()
 int main()
 {
 
-	/*if (getenv("vscode") != NULL)
+	if (getenv("vscode") != NULL)
 	{
 		freopen("in.txt", "r", stdin);
-	}*/
+	}
 	std::ios_base::sync_with_stdio(false);
 	std::cin.tie(NULL);
 	// testCaseGenerator();

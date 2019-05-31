@@ -47,19 +47,104 @@
 
 using namespace std;
 
-double cross(double cx, double cy, double x1, double y1,double x2, double y2){
-	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
-}
+struct Node{
+	bool canGoTop;
+	bool canGoRight;
+	ull numberOfWays;
+	int x,y;
+}nodes [31][31];
 
-int T;
+int T,n,x,y, x2,y2;
+
+ull dfs(Node& n){
+	if (n.numberOfWays != -1){
+		return n.numberOfWays;
+	}else{
+		// terminating 
+		if ((n.x == x2 && n.y == y2)){
+			n.numberOfWays == 1;
+			return 1;
+		}else{
+			ull aggregate = 0;
+			if (n.canGoRight && n.x != x2){
+				aggregate += dfs(nodes[n.x+1][n.y]);
+			}
+			if (n.canGoTop && n.y != y2){
+				aggregate += dfs(nodes[n.x][n.y+1]);
+			}
+			n.numberOfWays = aggregate;
+			return n.numberOfWays;
+		}
+	}
+}
 
 void mainFunction()
 {
-    /**
-     * Talk about improvements,
-     *      
-     */
-	
+	int w;
+	int  bx,by;
+	char c;
+
+	from(i,1,31){
+		from(j,1,31){
+			nodes[i][j].x = i;
+			nodes[i][j].y = j;
+		}
+	}
+
+
+	input (T);
+	while (
+		T--
+	){
+		input(n);
+
+		// run through all grids
+		n ++;
+		from(i,1,n){
+			from(j,1,n){
+				nodes[i][j].canGoRight = 
+				nodes[i][j].canGoTop = true;
+				nodes[i][j].numberOfWays = -1;
+			}
+		}
+
+		input (x);
+		input (y);
+
+		input (x2);
+		input (y2);
+
+		input(w);
+
+		from(i,0,w){
+			input(bx);
+			input(by);
+			cin >> c;
+
+			switch(c){
+				case 'N':
+					nodes[bx][by].canGoTop = false;
+					break; 
+
+				case 'E':
+					nodes[bx][by].canGoRight = false;
+					break;
+
+				case 'S':
+					nodes[bx][by-1].canGoTop = false;
+					break;
+
+				case 'W':
+					nodes[bx-1][by].canGoRight = false;
+					break;
+			}
+		}
+
+		printf("%lld\n",dfs(nodes[x][y]));
+
+	}
+
+
 }
 
 int main()
