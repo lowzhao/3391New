@@ -57,7 +57,7 @@ void mainFunction()
 		scanf("%d%d%d",&c,&s,&q) && 
 		!(c== 0&&s==0 && q ==0 )
 	){
-
+		
 		
 
 

@@ -55,18 +55,48 @@ int T;
 
 void mainFunction()
 {
-	int ev1,ev2,a,d;
-	while(cin >> ev1 >> ev2 >> a >> d && !(ev1 == 0 &&ev2 == 0 &&a == 0 &&d == 0 ) ){
-		ev1 = ceil( (double)ev1/d  ); 
-		ev2 = ceil( (double)ev2/d  ); 
-		if (a == 3){
-			printf("%.1f\n",100*((double) ev1)/(ev1+ev2) );
-		}else{
-			double probBase = (double) a/6;
-			probBase = (1- probBase) / probBase ;
-			printf("%.1f\n",100* ( (1- pow(probBase , ev1)) /  (1- pow(probBase,ev1+ev2) ) ));
+	int array[31] ;
+	bool all[1001];
+	int t = 1;
+	while(cin >> T)
+	{
+		bool possible = true;
+
+		memset(all,false,sizeof all);
+		cin >> array[0];
+		from(i,1,T){
+			cin >> array[i];
+
+			if (array[i] < array[i-1] ){
+				possible = false;
+			}
+		}
+		if (possible){
+			from (i,0,T){
+				if (all[array[i]]){
+					possible = false;
+					break;
+				}else{
+					all[array[i]] = true;
+					from(j,0,array[i]){
+						if (all[j] == true && array[i] + j <= 1000 ){
+							all[array[i] + j] = true;
+						}
+					}
+				}
+			}
 		}
 
+		cout << "Case #" << t << ":";
+		from (i,0,T){
+			cout <<" " << array[i] ;
+		}
+		if (possible){
+			cout << "\nThis is an A-sequence.\n";
+		}else{
+			cout << "\nThis is not an A-sequence.\n";
+		}
+		t++;
 	}
 }
 

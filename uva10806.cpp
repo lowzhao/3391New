@@ -50,24 +50,78 @@ using namespace std;
 double cross(double cx, double cy, double x1, double y1,double x2, double y2){
 	return (x1-cx)*(y2-cy) - (y1-cy)*(x2-cx);
 }
+struct Node{
+	int parent;
+	int path;
+	bool cleared ;
+	Node (){
+		parent = -1;
+		path = INF;
+		cleared =false;
+	}
+	// int 
+};
+int T,n,m;
 
-int T;
+int g[101][101] = {0};
+// int memo[][] 
+
+int minIn(Node m[]){
+	int res= INF;
+	int resIndex = -1;
+	from(i,0,n){
+		if (!m[i].cleared && m[i].path < res ) {
+			res = m[i].path;
+			resIndex = i;
+		}
+	}
+	return resIndex;
+}
+
+
+int dijkstra(int start, int end){
+
+	Node memo[n];
+	// at start
+	memo[start].parent = start;
+	memo[start].path = 0;
+
+	while(1){
+		// Find minimum distance
+		int curr = minIn(memo);
+		if (curr == -1){
+			return -1;
+		}else{
+			memo[curr].cleared = true;
+			// handle node
+			// 1. test all edge
+			from(i,0,n){
+				// Compare edge to memo
+				if (g[curr][i] != -1 && memo[i].path > memo[curr].path + g[curr][i] ){
+					memo[i].parent = curr;
+					memo[i].path   = memo[curr].path + g[curr][i];
+				}
+			}
+		}
+	}
+
+}
 
 void mainFunction()
 {
-	int ev1,ev2,a,d;
-	while(cin >> ev1 >> ev2 >> a >> d && !(ev1 == 0 &&ev2 == 0 &&a == 0 &&d == 0 ) ){
-		ev1 = ceil( (double)ev1/d  ); 
-		ev2 = ceil( (double)ev2/d  ); 
-		if (a == 3){
-			printf("%.1f\n",100*((double) ev1)/(ev1+ev2) );
-		}else{
-			double probBase = (double) a/6;
-			probBase = (1- probBase) / probBase ;
-			printf("%.1f\n",100* ( (1- pow(probBase , ev1)) /  (1- pow(probBase,ev1+ev2) ) ));
+	while (cin >> n and n != 0){
+		memset(g,-1,sizeof g)
+		cin >> m;
+		from(i,0,m){
+
 		}
 
+		dijkstra();
+		remove_edges();
+		dijkstra();
+
 	}
+
 }
 
 int main()

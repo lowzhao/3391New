@@ -55,16 +55,17 @@ int T;
 
 void mainFunction()
 {
-	int ev1,ev2,a,d;
-	while(cin >> ev1 >> ev2 >> a >> d && !(ev1 == 0 &&ev2 == 0 &&a == 0 &&d == 0 ) ){
-		ev1 = ceil( (double)ev1/d  ); 
-		ev2 = ceil( (double)ev2/d  ); 
-		if (a == 3){
-			printf("%.1f\n",100*((double) ev1)/(ev1+ev2) );
+	input(T);
+	int n,m;
+	while(T--){
+		input(n);
+		input(m);
+
+		double d = ((double)n-1)/(m-1);
+		if (d == (n-1)/(m-1)){
+			cout << (int)d << endl;
 		}else{
-			double probBase = (double) a/6;
-			probBase = (1- probBase) / probBase ;
-			printf("%.1f\n",100* ( (1- pow(probBase , ev1)) /  (1- pow(probBase,ev1+ev2) ) ));
+			cout <<	"cannot do this" <<endl; 
 		}
 
 	}
