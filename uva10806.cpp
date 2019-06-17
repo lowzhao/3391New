@@ -60,7 +60,7 @@ struct Node{
 		cleared =false;
 	}
 	// int 
-};
+}memo[101];
 int T,n,m;
 
 int g[101][101] = {0};
@@ -81,16 +81,16 @@ int minIn(Node m[]){
 
 int dijkstra(int start, int end){
 
-	Node memo[n];
+	from(i,0,n){memo[i].path=INF;}
+
 	// at start
 	memo[start].parent = start;
 	memo[start].path = 0;
-
 	while(1){
 		// Find minimum distance
 		int curr = minIn(memo);
 		if (curr == -1){
-			return -1;
+			break;
 		}else{
 			memo[curr].cleared = true;
 			// handle node
@@ -104,21 +104,40 @@ int dijkstra(int start, int end){
 			}
 		}
 	}
+	return memo[end].path;
 
 }
 
 void mainFunction()
 {
+	int	x1,x2,leng;
 	while (cin >> n and n != 0){
-		memset(g,-1,sizeof g)
+		memset(g,-1,sizeof g);
 		cin >> m;
 		from(i,0,m){
-
+			cin >> x1 >>	x2	>>	leng;
+			g[x1][x2]=leng;
+			g[x2][x1]=leng;
 		}
 
-		dijkstra();
-		remove_edges();
-		dijkstra();
+		int	res	=	dijkstra(1,m);
+		if(res==INF){
+			cout<<"Back to jail\n";
+			continue;
+		}
+		int pa = m;
+		while(pa!=1){
+			g[pa][memo[pa].parent]=-1;
+			g[memo[pa].parent][pa]=-1;
+			pa=memo[pa].parent;
+		}
+		res += dijkstra(m,1);
+		if (res >=INF){
+			cout<<"Back to jail\n"<<endl;
+			continue;
+		}else{
+			cout << res << endl;
+		}
 
 	}
 
